@@ -1,2 +1,131 @@
 @import "tailwindcss";
+
+/* ============================================
+   ANIME THEME CONFIGURATION
+   ============================================ */
+
 @plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "anime";
+  default: true;
+
+  /* === PRIMARY BRAND COLORS === */
+  --color-primary: #fb7299;           /* Bilibili signature pink - buttons, links, highlights */
+  --color-primary-content: #ffffff;   /* Text on pink backgrounds */
+
+  --color-secondary: #00a1d6;         /* Sky blue - secondary actions, info badges */
+  --color-secondary-content: #ffffff;
+
+  --color-accent: #ff8c00;            /* Warm orange - ratings, scores, special badges */
+  --color-accent-content: #ffffff;
+
+  /* === NEUTRAL COLORS === */
+  --color-neutral: #212121;           /* Deep gray for headings, important text */
+  --color-neutral-content: #ffffff;
+
+  /* === BACKGROUND LAYERS === */
+  --color-base-100: #ffffff;          /* Main background - page background */
+  --color-base-200: #f4f4f5;          /* Secondary background - cards, panels */
+  --color-base-300: #e3e5e7;          /* Tertiary background - borders, dividers */
+  --color-base-content: #212121;      /* Main text color on backgrounds */
+
+  /* === SEMANTIC COLORS === */
+  --color-info: #00a1d6;              /* Info alerts - uses secondary blue */
+  --color-info-content: #ffffff;
+
+  --color-success: #67c23a;           /* Success states - green */
+  --color-success-content: #ffffff;
+
+  --color-warning: #f39c12;           /* Warning states - amber */
+  --color-warning-content: #ffffff;
+
+  --color-error: #f56c6c;             /* Error states - soft red */
+  --color-error-content: #ffffff;
+}
+
+/* ============================================
+   CUSTOM UTILITY CLASSES
+   ============================================ */
+
+/* Card overlay gradient for anime cards */
+.card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0) 70%
+  );
+}
+
+/* Anime score/rating badge styling */
+.anime-badge {
+  @apply px-3 py-1.5 rounded;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  color: #ffffff !important;
+  font-size: 1.5rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Card wrapper for hover expansion */
+.card-wrapper {
+  @apply relative;
+}
+
+/* Normal card image container */
+.card-image-container {
+  @apply relative h-96 rounded-lg overflow-hidden shadow-xl cursor-pointer;
+  transition: transform 300ms ease-out, opacity 300ms ease-out, box-shadow 300ms ease-out;
+}
+
+/* Hover expanded state - desktop only */
+.card-hover-expanded {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  transform: scale(1.15);
+  transform-origin: center center;
+  z-index: 50;
+  width: 100%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Expanded content overlay */
+.expanded-content-overlay {
+  @apply absolute inset-0 p-6 flex flex-col justify-between;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.85) 50%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+/* Card info below image */
+.card-info-below {
+  @apply mt-3;
+}
+
+.card-info-below h3 {
+  @apply font-bold text-base mb-1 line-clamp-2;
+}
+
+.card-info-below p {
+  @apply text-sm text-base-content/60;
+}
+
+/* Anime gradient effect */
+.anime-gradient {
+  background: linear-gradient(135deg, #fb7299 0%, #ff8fab 100%);
+}
+
+/* Secondary text color utility */
+.text-secondary-gray {
+  color: #999999;
+}
+
+.text-tertiary-gray {
+  color: #cccccc;
+}

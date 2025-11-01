@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useApi } from '../hooks/useApi';
 import { animeApi } from '../api/animeApi';
+import { formatAnimeScore } from '../utils/format';
 
 function AnimeDetailsPage() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ function AnimeDetailsPage() {
     return (
       <div className="container mx-auto p-4">
         <div className="flex justify-center items-center min-h-screen">
-          <span className="loading loading-spinner loading-lg"></span>
+          <span className="loading loading-spinner loading-lg text-primary"></span>
         </div>
       </div>
     );
@@ -63,10 +64,10 @@ function AnimeDetailsPage() {
         <div className="lg:col-span-2">
           <h1 className="text-4xl font-bold mb-2">{anime.title}</h1>
           {anime.title_english && (
-            <h2 className="text-2xl text-gray-500 mb-2">{anime.title_english}</h2>
+            <h2 className="text-2xl text-secondary-gray mb-2">{anime.title_english}</h2>
           )}
           {anime.title_japanese && (
-            <h3 className="text-xl text-gray-400 mb-4">{anime.title_japanese}</h3>
+            <h3 className="text-xl text-base-content/60 mb-4">{anime.title_japanese}</h3>
           )}
 
           <div className="flex flex-wrap gap-2 mb-4">
@@ -79,27 +80,27 @@ function AnimeDetailsPage() {
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div>
-              <p className="text-sm text-gray-500">Type</p>
+              <p className="text-sm text-base-content/60">Type</p>
               <p className="font-semibold">{anime.type || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Episodes</p>
+              <p className="text-sm text-base-content/60">Episodes</p>
               <p className="font-semibold">{anime.episodes || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Status</p>
+              <p className="text-sm text-base-content/60">Status</p>
               <p className="font-semibold">{anime.status || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Score</p>
-              <p className="font-semibold">⭐ {anime.score || 'N/A'}</p>
+              <p className="text-sm text-base-content/60">Score</p>
+              <p className="font-semibold">⭐ {formatAnimeScore(anime.score)}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Duration</p>
+              <p className="text-sm text-base-content/60">Duration</p>
               <p className="font-semibold">{anime.duration || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Aired</p>
+              <p className="text-sm text-base-content/60">Aired</p>
               <p className="font-semibold">{anime.aired.string}</p>
             </div>
           </div>
@@ -107,7 +108,7 @@ function AnimeDetailsPage() {
           {anime.synopsis && (
             <div className="mb-6">
               <h3 className="text-xl font-bold mb-2">Synopsis</h3>
-              <p className="text-gray-700">{anime.synopsis}</p>
+              <p className="text-base-content/80">{anime.synopsis}</p>
             </div>
           )}
 
@@ -127,7 +128,7 @@ function AnimeDetailsPage() {
           {anime.background && (
             <div className="mb-4">
               <h4 className="text-lg font-semibold mb-2">Background</h4>
-              <p className="text-gray-700">{anime.background}</p>
+              <p className="text-base-content/80">{anime.background}</p>
             </div>
           )}
         </div>

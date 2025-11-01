@@ -7,3 +7,5 @@
 ## how i can handle network error and global error in react
 
 ## why image has lazy property how there can optimize my performance? 
+
+## in common video website should i format rating from two decimal point convert to one decimal point

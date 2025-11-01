@@ -30,7 +30,7 @@ function SearchBar({
         <button
           onMouseDown={(e) => e.preventDefault()}
           onClick={handleClear}
-          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-gray-400 hover:text-gray-600 active:scale-90 transition-all duration-150 p-1 hover:bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300"
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-base-content/60 hover:text-base-content/80 active:scale-90 transition-all duration-150 p-1 hover:bg-base-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/30"
           aria-label="Clear search"
         >
           <MdClose className="w-5 h-5" />

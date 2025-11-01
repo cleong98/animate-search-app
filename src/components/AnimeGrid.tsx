@@ -15,7 +15,7 @@ function AnimeGrid({
   skeletonCount = 8,
 }: AnimeGridProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {isLoading
         ? Array.from({ length: skeletonCount }).map((_, index) => (
             <AnimeCard key={`skeleton-${index}`} isLoading />
