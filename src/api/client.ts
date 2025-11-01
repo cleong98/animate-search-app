@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type AxiosResponse, type AxiosError } from "axios";
 
 const apiClient = axios.create({
   baseURL: "https://api.jikan.moe/v4",
@@ -9,8 +9,8 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
     if (axios.isCancel(error)) {
       return Promise.resolve({ data: null, cancelled: true });
     }

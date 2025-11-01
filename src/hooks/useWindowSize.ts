@@ -48,12 +48,6 @@ export function useBreakpoint() {
   };
 }
 
-/**
- * Get the number of grid columns based on screen size
- * Mobile (< 768px): 2 columns
- * Tablet/Desktop (768px - 1279px): 3 columns
- * Large Desktop (≥ 1280px): 4 columns
- */
 export function getGridColumns(width: number): number {
   if (width >= BREAKPOINTS.xl) return 4; // >= 1280px
   if (width >= BREAKPOINTS.md) return 3; // >= 768px

@@ -22,25 +22,21 @@ export function useDebounceSearch({
 }: UseDebounceSearchParams) {
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Use refs for cache values so cache updates don't trigger re-fetch
   const cachedQueryRef = useRef(cachedQuery);
   const cachedPageRef = useRef(cachedPage);
   const hasCachedDataRef = useRef(hasCachedData);
 
-  // Update refs when cache changes (doesn't trigger effect)
   cachedQueryRef.current = cachedQuery;
   cachedPageRef.current = cachedPage;
   hasCachedDataRef.current = hasCachedData;
 
   useEffect(() => {
-    // Check if we have cached data for this exact query + page combination
     const isCacheValid =
       hasCachedDataRef.current &&
       searchQuery.trim() === cachedQueryRef.current &&
       currentPage === cachedPageRef.current;
 
     if (isCacheValid) {
-      // Skip fetching, use cached data
       return;
     }
 

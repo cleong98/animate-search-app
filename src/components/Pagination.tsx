@@ -20,27 +20,22 @@ function Pagination({
   const canGoPrevious = currentPage > 1;
   const canGoNext = hasNextPage && currentPage < totalPages;
 
-  // Don't render if only one page
   if (totalPages <= 1) {
     return null;
   }
 
-  // Generate exactly 5 page numbers to display (for desktop)
   const getPageNumbers = () => {
     const pages: number[] = [];
     const maxVisible = 5;
 
     if (totalPages <= maxVisible) {
-      // Show all pages if total is 5 or less
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Always show exactly 5 pages centered around current page
       let start = Math.max(1, currentPage - 2);
       let end = Math.min(totalPages, start + maxVisible - 1);
 
-      // Adjust if at the end
       if (end === totalPages) {
         start = Math.max(1, end - maxVisible + 1);
       }
@@ -81,11 +76,9 @@ function Pagination({
 
   const pageNumbers = getPageNumbers();
 
-  // Mobile Layout: Compact with page indicator and jump functionality
   if (isMobile) {
     return (
       <div className="flex flex-col items-center gap-3 mt-8">
-        {/* Navigation Buttons */}
         <div className="flex items-center gap-2">
           <button
             className="btn btn-sm"
@@ -108,7 +101,6 @@ function Pagination({
           </button>
         </div>
 
-        {/* Jump to Page */}
         <div className="flex items-center gap-2">
           <span className="text-xs whitespace-nowrap">Go to page:</span>
           <input
@@ -129,10 +121,8 @@ function Pagination({
     );
   }
 
-  // Desktop Layout: Full pagination with numbered buttons
   return (
     <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-8">
-      {/* Pagination Buttons */}
       <div className="flex items-center gap-1">
         <button
           className="btn btn-sm"

@@ -28,9 +28,7 @@ export function useApi<T, P extends unknown[]>(
       try {
         const result = await apiFunction(...params);
 
-        // Check if request was cancelled (from interceptor)
-        if (result && typeof result === 'object' && 'cancelled' in result) {
-          // Request was cancelled - don't set error, just stop loading
+        if (result && typeof result === "object" && "cancelled" in result) {
           setState({ data: null, loading: false, error: null });
           return;
         }
@@ -38,8 +36,6 @@ export function useApi<T, P extends unknown[]>(
         setState({ data: result, loading: false, error: null });
       } catch (err) {
         const error = err as AxiosError;
-
-        // Pass the full error object to component for handling
         setState({ data: null, loading: false, error });
       }
     },

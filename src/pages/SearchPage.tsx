@@ -9,6 +9,7 @@ import {
   setCachedData,
 } from "../store/searchSlice";
 import { animeApi } from "../api/animeApi";
+import AppBar from "../components/AppBar";
 import SearchBar from "../components/SearchBar";
 import AnimeGrid from "../components/AnimeGrid";
 import Pagination from "../components/Pagination";
@@ -81,48 +82,50 @@ function SearchPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-7xl">
-      <h1 className="text-3xl font-bold mb-6">Anime Search</h1>
+    <>
+      <AppBar title="Anime App" />
 
-      <SearchBar value={searchQuery} onChange={handleSearchChange} />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-7xl">
+        <SearchBar value={searchQuery} onChange={handleSearchChange} />
 
-      <div className="min-h-[400px]">
-        {error && (
-          <ErrorAlert
-            message={error.message || "An error occurred. Please try again."}
-            showRetry
-            onRetry={() =>
-              execute({ q: searchQuery.trim(), page: currentPage, limit: 25 })
-            }
-          />
-        )}
+        <div className="min-h-[400px]">
+          {error && (
+            <ErrorAlert
+              message={error.message || "An error occurred. Please try again."}
+              showRetry
+              onRetry={() =>
+                execute({ q: searchQuery.trim(), page: currentPage, limit: 25 })
+              }
+            />
+          )}
 
-        {!error && (
-          <>
-            {displayData && displayData.data.length === 0 && !loading ? (
-              <EmptyState searchQuery={searchQuery.trim()} />
-            ) : (
-              <>
-                <AnimeGrid
-                  animes={displayData?.data}
-                  onAnimeClick={handleAnimeClick}
-                  isLoading={loading || !displayData}
-                />
-
-                {displayData && (
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={displayData.pagination.last_visible_page}
-                    onPageChange={handlePageChange}
-                    hasNextPage={displayData.pagination.has_next_page}
+          {!error && (
+            <>
+              {displayData && displayData.data.length === 0 && !loading ? (
+                <EmptyState searchQuery={searchQuery.trim()} />
+              ) : (
+                <>
+                  <AnimeGrid
+                    animes={displayData?.data}
+                    onAnimeClick={handleAnimeClick}
+                    isLoading={loading || !displayData}
                   />
-                )}
-              </>
-            )}
-          </>
-        )}
+
+                  {displayData && (
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={displayData.pagination.last_visible_page}
+                      onPageChange={handlePageChange}
+                      hasNextPage={displayData.pagination.has_next_page}
+                    />
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
