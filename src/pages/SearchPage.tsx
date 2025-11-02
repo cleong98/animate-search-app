@@ -30,9 +30,7 @@ function SearchPage() {
   const selectedType = useAppSelector((state) => state.search.selectedType);
   const selectedStatus = useAppSelector((state) => state.search.selectedStatus);
   const selectedRating = useAppSelector((state) => state.search.selectedRating);
-  const cachedType = useAppSelector((state) => state.search.cachedType);
-  const cachedStatus = useAppSelector((state) => state.search.cachedStatus);
-  const cachedRating = useAppSelector((state) => state.search.cachedRating);
+  const selectedGenres = useAppSelector((state) => state.search.selectedGenres);
 
   const { data, loading, error, execute } = useApi(animeApi.searchAnime);
 
@@ -41,6 +39,7 @@ function SearchPage() {
   const dataTypeRef = useRef<string>("");
   const dataStatusRef = useRef<string>("");
   const dataRatingRef = useRef<string>("");
+  const dataGenresRef = useRef<number[]>([]);
 
   useDebounceSearch({
     searchQuery,
@@ -50,6 +49,10 @@ function SearchPage() {
     hasCachedData: cachedData !== null,
     execute,
     delay: 250,
+    selectedType,
+    selectedStatus,
+    selectedRating,
+    selectedGenres,
   });
 
   useEffect(() => {
@@ -59,19 +62,20 @@ function SearchPage() {
       dataTypeRef.current = selectedType;
       dataStatusRef.current = selectedStatus;
       dataRatingRef.current = selectedRating;
+      dataGenresRef.current = selectedGenres;
 
       dispatch(
         setCachedData({
           query: searchQuery.trim(),
           page: currentPage,
           data,
-          type: selectedType,
-          status: selectedStatus,
-          rating: selectedRating,
         })
       );
     }
-  }, [data, searchQuery, currentPage, selectedType, selectedStatus, selectedRating, dispatch]);
+  }, [data, searchQuery, currentPage, selectedType, selectedStatus, selectedRating, selectedGenres, dispatch]);
+
+  const arraysEqual = (a: number[], b: number[]) =>
+    a.length === b.length && a.every((val, idx) => val === b[idx]);
 
   const isDataFresh =
     data &&
@@ -79,15 +83,13 @@ function SearchPage() {
     dataPageRef.current === currentPage &&
     dataTypeRef.current === selectedType &&
     dataStatusRef.current === selectedStatus &&
-    dataRatingRef.current === selectedRating;
+    dataRatingRef.current === selectedRating &&
+    arraysEqual(dataGenresRef.current, selectedGenres);
 
   const isCacheValid =
     cachedData &&
     cachedQuery === searchQuery.trim() &&
-    cachedPage === currentPage &&
-    cachedType === selectedType &&
-    cachedStatus === selectedStatus &&
-    cachedRating === selectedRating;
+    cachedPage === currentPage;
 
   const displayData = isDataFresh ? data : isCacheValid ? cachedData : null;
 
@@ -111,6 +113,7 @@ function SearchPage() {
       type: selectedType,
       status: selectedStatus,
       rating: selectedRating,
+      genres: selectedGenres,
     });
   };
 
@@ -120,7 +123,7 @@ function SearchPage() {
       <AppBar title="Anime App" />
 
       {/* Fixed Search and Filter Area */}
-      <div className="flex-shrink-0 border-b border-base-300 bg-base-100">
+      <div className="shrink-0 border-b border-base-300 bg-base-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 max-w-7xl">
           <div className="relative">
             <SearchBar value={searchQuery} onChange={handleSearchChange} />
@@ -144,6 +147,7 @@ function SearchPage() {
                   type: selectedType,
                   status: selectedStatus,
                   rating: selectedRating,
+                  genres: selectedGenres,
                 })
               }
             />

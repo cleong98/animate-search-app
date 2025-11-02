@@ -5,7 +5,9 @@
       "Bash(tree:*)",
       "Bash(npm run test:run:*)",
       "Bash(npm run build:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm test:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

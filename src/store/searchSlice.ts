@@ -11,11 +11,8 @@ interface SearchState {
   selectedType: string;
   selectedStatus: string;
   selectedRating: string;
+  selectedGenres: number[];
   isFilterOpen: boolean;
-  // Cached filter state
-  cachedType: string;
-  cachedStatus: string;
-  cachedRating: string;
 }
 
 const initialState: SearchState = {
@@ -27,10 +24,8 @@ const initialState: SearchState = {
   selectedType: "",
   selectedStatus: "",
   selectedRating: "",
+  selectedGenres: [],
   isFilterOpen: false,
-  cachedType: "",
-  cachedStatus: "",
-  cachedRating: "",
 };
 
 const searchSlice = createSlice({
@@ -50,17 +45,11 @@ const searchSlice = createSlice({
         query: string;
         page: number;
         data: AnimeSearchResponse;
-        type: string;
-        status: string;
-        rating: string;
       }>
     ) => {
       state.cachedQuery = action.payload.query;
       state.cachedPage = action.payload.page;
       state.cachedData = action.payload.data;
-      state.cachedType = action.payload.type;
-      state.cachedStatus = action.payload.status;
-      state.cachedRating = action.payload.rating;
     },
     resetSearch: (state) => {
       state.query = "";
@@ -71,10 +60,8 @@ const searchSlice = createSlice({
       state.selectedType = "";
       state.selectedStatus = "";
       state.selectedRating = "";
+      state.selectedGenres = [];
       state.isFilterOpen = false;
-      state.cachedType = "";
-      state.cachedStatus = "";
-      state.cachedRating = "";
     },
     // Filter actions (single selection)
     setTypeFilter: (state, action: PayloadAction<string>) => {
@@ -89,6 +76,16 @@ const searchSlice = createSlice({
       state.selectedRating = action.payload;
       state.currentPage = 1;
     },
+    toggleGenreFilter: (state, action: PayloadAction<number>) => {
+      const genreId = action.payload;
+      const index = state.selectedGenres.indexOf(genreId);
+      if (index > -1) {
+        state.selectedGenres.splice(index, 1);
+      } else {
+        state.selectedGenres.push(genreId);
+      }
+      state.currentPage = 1;
+    },
     toggleFilterPanel: (state) => {
       state.isFilterOpen = !state.isFilterOpen;
     },
@@ -96,6 +93,7 @@ const searchSlice = createSlice({
       state.selectedType = "";
       state.selectedStatus = "";
       state.selectedRating = "";
+      state.selectedGenres = [];
       state.currentPage = 1;
     },
   },
@@ -109,6 +107,7 @@ export const {
   setTypeFilter,
   setStatusFilter,
   setRatingFilter,
+  toggleGenreFilter,
   toggleFilterPanel,
   clearAllFilters,
 } = searchSlice.actions;

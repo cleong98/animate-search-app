@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import type { RootState } from "../store";
 import {
   setTypeFilter,
   setStatusFilter,
   setRatingFilter,
+  toggleGenreFilter,
   clearAllFilters,
   toggleFilterPanel,
 } from "../store/searchSlice";
@@ -13,27 +15,43 @@ import {
   STATUS_OPTIONS,
   RATING_OPTIONS,
   type FilterOption,
+  type Genre,
 } from "../api/types";
+import { animeApi } from "../api/animeApi";
 
 interface FilterSectionProps {
   title: string;
   options: FilterOption[];
-  selectedValue: string;
-  onChange: (value: string) => void;
+  selectedValue?: string;
+  selectedValues?: number[];
+  onChange?: (value: string) => void;
+  onToggle?: (value: number) => void;
+  multiSelect?: boolean;
 }
 
 const FilterSection = ({
   title,
   options,
   selectedValue,
+  selectedValues = [],
   onChange,
+  onToggle,
+  multiSelect = false,
 }: FilterSectionProps) => {
   const handleSelect = (value: string) => {
-    // Toggle: if clicking the same value, deselect it
-    if (selectedValue === value) {
-      onChange("");
-    } else {
-      onChange(value);
+    if (!multiSelect && onChange) {
+      // Single select: toggle if same value
+      if (selectedValue === value) {
+        onChange("");
+      } else {
+        onChange(value);
+      }
+    }
+  };
+
+  const handleToggle = (value: number) => {
+    if (multiSelect && onToggle) {
+      onToggle(value);
     }
   };
 
@@ -42,14 +60,18 @@ const FilterSection = ({
       <h3 className="font-semibold text-base-content mb-3 text-sm">
         {title}
       </h3>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2">
         {options.map((option) => {
-          const isSelected = selectedValue === option.value;
+          const value = multiSelect ? Number(option.value) : option.value;
+          const isSelected = multiSelect
+            ? selectedValues.includes(value as number)
+            : selectedValue === option.value;
+
           return (
             <button
               key={option.value}
-              onClick={() => handleSelect(option.value)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 active:scale-95 ${
+              onClick={() => multiSelect ? handleToggle(value as number) : handleSelect(option.value)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 active:scale-95 flex-shrink-0 ${
                 isSelected
                   ? "bg-primary hover:bg-primary-focus text-primary-content shadow-md"
                   : "bg-base-200 hover:bg-base-300 text-base-content"
@@ -71,8 +93,25 @@ interface FilterPanelProps {
 
 export const FilterPanel = ({ onApplyFilters }: FilterPanelProps) => {
   const dispatch = useDispatch();
-  const { isFilterOpen, selectedType, selectedStatus, selectedRating } =
+  const { isFilterOpen, selectedType, selectedStatus, selectedRating, selectedGenres } =
     useSelector((state: RootState) => state.search);
+  const [genres, setGenres] = useState<Genre[]>([]);
+  const [isLoadingGenres, setIsLoadingGenres] = useState(false);
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      setIsLoadingGenres(true);
+      try {
+        const response = await animeApi.getGenres();
+        setGenres(response.data);
+      } catch (error) {
+        console.error("Failed to fetch genres:", error);
+      } finally {
+        setIsLoadingGenres(false);
+      }
+    };
+    fetchGenres();
+  }, []);
 
   const handleClearAll = () => {
     dispatch(clearAllFilters());
@@ -83,8 +122,16 @@ export const FilterPanel = ({ onApplyFilters }: FilterPanelProps) => {
     dispatch(toggleFilterPanel());
   };
 
+  const genreOptions: FilterOption[] = genres.map((genre) => ({
+    value: String(genre.mal_id),
+    label: genre.name,
+  }));
+
   const totalFilters =
-    (selectedType ? 1 : 0) + (selectedStatus ? 1 : 0) + (selectedRating ? 1 : 0);
+    (selectedType ? 1 : 0) +
+    (selectedStatus ? 1 : 0) +
+    (selectedRating ? 1 : 0) +
+    selectedGenres.length;
 
   return (
     <>
@@ -140,6 +187,15 @@ export const FilterPanel = ({ onApplyFilters }: FilterPanelProps) => {
                   selectedValue={selectedRating}
                   onChange={(value) => dispatch(setRatingFilter(value))}
                 />
+                {!isLoadingGenres && genreOptions.length > 0 && (
+                  <FilterSection
+                    title="Genres"
+                    options={genreOptions}
+                    selectedValues={selectedGenres}
+                    onToggle={(genreId) => dispatch(toggleGenreFilter(genreId))}
+                    multiSelect={true}
+                  />
+                )}
               </div>
             </div>
             {/* Mobile footer */}
@@ -174,9 +230,9 @@ export const FilterPanel = ({ onApplyFilters }: FilterPanelProps) => {
         `}
       >
         {/* Desktop panel content */}
-        <div className="bg-base-100 rounded-lg border border-base-300 mb-6">
-          {/* Desktop content */}
-          <div className="p-4">
+        <div className="bg-base-100 rounded-lg border border-base-300 mb-6 flex flex-col">
+          {/* Desktop content - scrollable with max height */}
+          <div className="p-4 max-h-[400px] overflow-y-auto">
           <div className="space-y-4">
             <FilterSection
               title="Type"
@@ -198,6 +254,16 @@ export const FilterPanel = ({ onApplyFilters }: FilterPanelProps) => {
               selectedValue={selectedRating}
               onChange={(value) => dispatch(setRatingFilter(value))}
             />
+
+            {!isLoadingGenres && genreOptions.length > 0 && (
+              <FilterSection
+                title="Genres"
+                options={genreOptions}
+                selectedValues={selectedGenres}
+                onToggle={(genreId) => dispatch(toggleGenreFilter(genreId))}
+                multiSelect={true}
+              />
+            )}
           </div>
           </div>
 

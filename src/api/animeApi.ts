@@ -3,11 +3,13 @@ import type {
   AnimeSearchResponse,
   AnimeDetailsResponse,
   AnimeSearchParams,
+  GenreResponse,
 } from "./types";
 
 interface AnimeApi {
   searchAnime: (params: AnimeSearchParams) => Promise<AnimeSearchResponse>;
   getAnimeById: (id: number) => Promise<AnimeDetailsResponse>;
+  getGenres: () => Promise<GenreResponse>;
 }
 
 interface SearchRequestParams {
@@ -17,6 +19,7 @@ interface SearchRequestParams {
   type?: string;
   status?: string;
   rating?: string;
+  genres?: string;
 }
 
 export const animeApi: AnimeApi = {
@@ -38,6 +41,9 @@ export const animeApi: AnimeApi = {
     if (params.rating) {
       searchParams.rating = params.rating;
     }
+    if (params.genres && params.genres.length > 0) {
+      searchParams.genres = params.genres.join(',');
+    }
     const response = await apiClient.get<AnimeSearchResponse>("/anime", {
       params: searchParams,
       signal: params.signal,
@@ -48,6 +54,12 @@ export const animeApi: AnimeApi = {
   // Get anime by ID
   getAnimeById: async (id: number) => {
     const response = await apiClient.get<AnimeDetailsResponse>(`/anime/${id}`);
+    return response.data;
+  },
+
+  // Get all genres
+  getGenres: async () => {
+    const response = await apiClient.get<GenreResponse>("/genres/anime");
     return response.data;
   },
 };

@@ -72,6 +72,17 @@ export interface AnimeDetailsResponse {
   data: Anime;
 }
 
+// Genre object from Jikan API
+export interface Genre {
+  mal_id: number;
+  name: string;
+}
+
+// Genre response
+export interface GenreResponse {
+  data: Genre[];
+}
+
 // Search params
 export interface AnimeSearchParams {
   q: string;
@@ -81,6 +92,7 @@ export interface AnimeSearchParams {
   type?: string;
   status?: string;
   rating?: string;
+  genres?: number[];
 }
 
 // Filter option types

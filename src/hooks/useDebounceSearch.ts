@@ -9,6 +9,10 @@ interface UseDebounceSearchParams {
   hasCachedData: boolean;
   execute: (params: AnimeSearchParams) => Promise<void>;
   delay?: number;
+  selectedType?: string;
+  selectedStatus?: string;
+  selectedRating?: string;
+  selectedGenres?: number[];
 }
 
 export function useDebounceSearch({
@@ -19,6 +23,10 @@ export function useDebounceSearch({
   hasCachedData,
   execute,
   delay = 250,
+  selectedType,
+  selectedStatus,
+  selectedRating,
+  selectedGenres,
 }: UseDebounceSearchParams) {
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -53,6 +61,10 @@ export function useDebounceSearch({
         page: currentPage,
         limit: 25,
         signal: abortController.signal,
+        type: selectedType,
+        status: selectedStatus,
+        rating: selectedRating,
+        genres: selectedGenres,
       });
     }, delay);
 
@@ -60,5 +72,5 @@ export function useDebounceSearch({
       clearTimeout(timeoutId);
       abortController.abort();
     };
-  }, [searchQuery, currentPage, execute, delay]);
+  }, [searchQuery, currentPage, execute, delay, selectedType, selectedStatus, selectedRating, selectedGenres]);
 }

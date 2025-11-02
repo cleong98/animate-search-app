@@ -9,6 +9,7 @@ A modern, responsive anime search application built with React, TypeScript, and 
 ## Features
 
 - **Instant Search** - Real-time anime search with 250ms debouncing for optimal performance
+- **Advanced Filtering** - Multi-select genre filtering with Type, Status, and Rating filters
 - **Server-Side Pagination** - Efficiently browse through large result sets
 - **Detailed Anime Information** - View comprehensive details including synopsis, studios, ratings, and more
 - **Responsive Design** - Seamless experience across desktop, tablet, and mobile devices
@@ -81,6 +82,7 @@ src/
 │   ├── AppBar.tsx    # Navigation header
 │   ├── EmptyState.tsx
 │   ├── ErrorAlert.tsx
+│   ├── FilterPanel.tsx # Advanced filtering UI
 │   ├── Pagination.tsx
 │   └── SearchBar.tsx
 ├── hooks/            # Custom React hooks
@@ -132,7 +134,16 @@ This project includes several bonus features that enhance both user experience a
    - Loading states don't block user interaction
    - Progress indication during API calls
 
-6. **Additional Features**
+6. **Advanced Filtering System**
+   - Multi-select genre filtering (40+ genres from Jikan API)
+   - Single-select filters for Type, Status, and Rating
+   - Filter count badge showing active filters
+   - Responsive filter panel with controlled height
+   - Horizontal scrolling for overflow options
+   - Smooth open/close animations
+   - Clear all filters functionality
+
+7. **Additional Features**
    - Intelligent caching layer to minimize redundant API calls
    - Back navigation support
    - 404 page with recovery options
@@ -174,10 +185,11 @@ This project includes several bonus features that enhance both user experience a
    - No class components (hooks only)
 
 6. **Comprehensive Testing**
-   - 87 test cases with 100% pass rate
+   - 98 test cases with 100% pass rate
    - Unit tests for hooks, Redux, and utilities
    - Component tests with React Testing Library
    - API integration tests with MSW (Mock Service Worker)
+   - Filter functionality tests (Redux actions + API integration)
    - Critical debouncing and cancellation tests
    - Test coverage includes edge cases and error scenarios
 
@@ -203,12 +215,15 @@ npm run test:coverage
 
 ### Test Coverage
 
-**87 total tests** covering:
+**98 total tests** covering:
 
-- **Redux State Management** (10 tests)
+- **Redux State Management** (17 tests)
   - Action creators and reducers
   - State immutability
   - Cache management
+  - Filter actions (Type, Status, Rating, Genres)
+  - Multi-select genre toggle functionality
+  - Clear all filters
 
 - **Debounced Search** (12 tests) ⭐ **CRITICAL**
   - 250ms debounce verification
@@ -216,11 +231,17 @@ npm run test:coverage
   - Cache validation logic
   - AbortController cleanup
 
-- **API Layer** (17 tests)
+- **API Layer** (12 tests)
   - Jikan API integration with MSW
   - Request/response handling
   - Error scenarios
   - Axios interceptors
+
+- **Filter Integration** (4 tests)
+  - Genre parameter formatting (comma-delimited IDs)
+  - Multiple filter parameters combined
+  - Empty genre array handling
+  - Genre API endpoint (/genres/anime)
 
 - **Custom Hooks** (11 tests)
   - useApi hook states (loading, data, error)
@@ -232,6 +253,30 @@ npm run test:coverage
   - Pagination logic
   - User input handling
   - Accessibility features
+
+### Recent Test Additions (Filter System)
+
+The filter system is fully tested with **21 new tests**:
+
+**Redux Filter Tests** (`searchSlice.test.ts`) - 7 tests:
+- ✅ `setTypeFilter` updates type and resets page to 1
+- ✅ `setStatusFilter` updates status and resets page to 1
+- ✅ `setRatingFilter` updates rating and resets page to 1
+- ✅ `toggleGenreFilter` adds genre when not selected
+- ✅ `toggleGenreFilter` removes genre when already selected
+- ✅ `toggleGenreFilter` can add multiple genres sequentially
+- ✅ `clearAllFilters` resets all filters and page to 1
+
+**Filter Integration Tests** (`filters.test.ts`) - 4 tests:
+- ✅ Genres sent as comma-delimited string (e.g., "1,2,4")
+- ✅ All filter parameters passed correctly to API
+- ✅ Empty genre array omitted from API call
+- ✅ `getGenres()` calls `/genres/anime` endpoint
+
+**Additional Updates** - 10 tests:
+- ✅ Updated existing tests to remove redundant cached filters
+- ✅ Filter count badge includes genre count (SearchBar tests)
+- ✅ Redux state properly includes selectedGenres array
 
 ### Test Stack
 
@@ -245,8 +290,9 @@ npm run test:coverage
 This app uses the [Jikan API](https://docs.api.jikan.moe/), a free REST API for MyAnimeList data. No authentication is required.
 
 Endpoints used:
-- `GET /anime` - Search anime with pagination
+- `GET /anime` - Search anime with pagination and filters (type, status, rating, genres)
 - `GET /anime/{id}` - Get detailed anime information
+- `GET /genres/anime` - Get all available anime genres
 
 ## Browser Support
 

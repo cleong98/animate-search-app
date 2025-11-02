@@ -15,7 +15,7 @@ function SearchBar({
   placeholder = "Search for anime...",
 }: SearchBarProps) {
   const dispatch = useDispatch();
-  const { selectedType, selectedStatus, selectedRating } = useSelector(
+  const { selectedType, selectedStatus, selectedRating, selectedGenres } = useSelector(
     (state: RootState) => state.search
   );
 
@@ -25,7 +25,7 @@ function SearchBar({
 
   const showClearButton = value.length > 0;
   const activeFilterCount =
-    (selectedType ? 1 : 0) + (selectedStatus ? 1 : 0) + (selectedRating ? 1 : 0);
+    (selectedType ? 1 : 0) + (selectedStatus ? 1 : 0) + (selectedRating ? 1 : 0) + selectedGenres.length;
 
   return (
     <div className="mb-6 relative">
