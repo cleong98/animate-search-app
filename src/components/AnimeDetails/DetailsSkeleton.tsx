@@ -3,12 +3,12 @@ export function DetailsSkeleton() {
     <div className="min-h-screen">
       <div className="relative w-full -mx-4 -mt-4 mb-8 bg-base-100">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="skeleton w-48 md:w-56 lg:w-64 h-64 md:h-80 lg:h-96 rounded-lg"></div>
+          <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+            <div className="skeleton w-48 md:w-56 lg:w-64 aspect-[2/3] rounded-lg"></div>
 
-            <div className="grow flex flex-col justify-end space-y-4">
+            <div className="grow flex flex-col justify-end space-y-4 text-center md:text-left items-center md:items-start">
               <div className="skeleton h-10 md:h-12 w-3/4"></div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="skeleton h-4 w-16"></div>
                 ))}
@@ -17,14 +17,14 @@ export function DetailsSkeleton() {
               <div className="skeleton h-4 w-2/3"></div>
               <div className="skeleton h-4 w-1/2"></div>
 
-              <div className="flex flex-wrap items-center gap-6">
+              <div className="flex flex-wrap items-center gap-6 justify-center md:justify-start">
                 <div className="skeleton h-6 w-12"></div>
                 <div className="skeleton h-4 w-16"></div>
                 <div className="skeleton h-4 w-24"></div>
                 <div className="skeleton h-4 w-20"></div>
               </div>
 
-              <div className="flex flex-wrap gap-6">
+              <div className="flex flex-wrap gap-6 justify-center md:justify-start">
                 <div className="skeleton h-4 w-24"></div>
                 <div className="skeleton h-4 w-16"></div>
               </div>
