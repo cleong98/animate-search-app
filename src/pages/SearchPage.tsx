@@ -72,7 +72,16 @@ function SearchPage() {
         })
       );
     }
-  }, [data, searchQuery, currentPage, selectedType, selectedStatus, selectedRating, selectedGenres, dispatch]);
+  }, [
+    data,
+    searchQuery,
+    currentPage,
+    selectedType,
+    selectedStatus,
+    selectedRating,
+    selectedGenres,
+    dispatch,
+  ]);
 
   const arraysEqual = (a: number[], b: number[]) =>
     a.length === b.length && a.every((val, idx) => val === b[idx]);

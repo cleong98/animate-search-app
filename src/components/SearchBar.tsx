@@ -15,9 +15,8 @@ function SearchBar({
   placeholder = "Search for anime...",
 }: SearchBarProps) {
   const dispatch = useDispatch();
-  const { selectedType, selectedStatus, selectedRating, selectedGenres } = useSelector(
-    (state: RootState) => state.search
-  );
+  const { selectedType, selectedStatus, selectedRating, selectedGenres } =
+    useSelector((state: RootState) => state.search);
 
   const handleClear = () => {
     onChange("");
@@ -25,7 +24,10 @@ function SearchBar({
 
   const showClearButton = value.length > 0;
   const activeFilterCount =
-    (selectedType ? 1 : 0) + (selectedStatus ? 1 : 0) + (selectedRating ? 1 : 0) + selectedGenres.length;
+    (selectedType ? 1 : 0) +
+    (selectedStatus ? 1 : 0) +
+    (selectedRating ? 1 : 0) +
+    selectedGenres.length;
 
   return (
     <div className="mb-6 relative">
@@ -58,7 +60,7 @@ function SearchBar({
           <MdFilterList className="w-5 h-5" />
           <span className="hidden sm:inline">Filters</span>
           {activeFilterCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
               {activeFilterCount}
             </span>
           )}
