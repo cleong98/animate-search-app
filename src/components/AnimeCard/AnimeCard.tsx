@@ -1,6 +1,5 @@
 import type { Anime } from "../../api/types";
 import { useBreakpoint } from "../../hooks/useWindowSize";
-import { useCardHover } from "./useCardHover";
 import { CardSkeleton } from "./CardSkeleton";
 import { CardImage } from "./CardImage";
 import { TypeBadge, MembersBadge, ScoreBadge } from "./CardBadges";
@@ -15,9 +14,6 @@ export interface AnimeCardProps {
 
 function AnimeCard({ anime, onClick, isLoading = false }: AnimeCardProps) {
   const { isMobile } = useBreakpoint();
-  const { isHovered, handleMouseEnter, handleMouseLeave } = useCardHover({
-    isMobile,
-  });
 
   if (isLoading) {
     return <CardSkeleton />;
@@ -33,36 +29,25 @@ function AnimeCard({ anime, onClick, isLoading = false }: AnimeCardProps) {
 
   const metadata = formatMetadata(anime.episodes, anime.year);
 
-  const showExpandedContent = isHovered && !isMobile;
-  const showInfoBelow = !showExpandedContent;
-
   return (
-    <div className="card-wrapper">
-      <div
-        className={`card-image-container ${
-          showExpandedContent ? "card-hover-expanded" : ""
-        }`}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
-      >
+    <div className={`card-wrapper ${isMobile ? "mobile" : ""}`}>
+      <div className="card-image-container" onClick={handleClick}>
         <CardImage
           imageUrl={anime.images.jpg.image_url}
           webpUrl={anime.images.webp.image_url}
           title={anime.title}
         />
 
-        {!isHovered && (
-          <>
-            <div className="absolute inset-0 card-overlay"></div>
+        {/* Overlay and type badge - hidden on hover via CSS */}
+        <div className="card-overlay-layer">
+          <div className="absolute inset-0 card-overlay"></div>
 
-            {anime.type && (
-              <div className="absolute top-3 left-3">
-                <TypeBadge type={anime.type} />
-              </div>
-            )}
-          </>
-        )}
+          {anime.type && (
+            <div className="absolute top-3 left-3">
+              <TypeBadge type={anime.type} />
+            </div>
+          )}
+        </div>
 
         <div className="absolute bottom-3 left-3 z-10">
           <MembersBadge members={anime.members} />
@@ -72,7 +57,8 @@ function AnimeCard({ anime, onClick, isLoading = false }: AnimeCardProps) {
           <ScoreBadge score={anime.score} />
         </div>
 
-        {showExpandedContent && (
+        {/* Expanded content - shown on hover via CSS */}
+        <div className="card-expanded-content">
           <ExpandedContent
             type={anime.type}
             title={anime.title}
@@ -81,16 +67,14 @@ function AnimeCard({ anime, onClick, isLoading = false }: AnimeCardProps) {
             year={anime.year}
             genres={anime.genres}
           />
-        )}
+        </div>
       </div>
 
-      {/* Info Below Card - Hidden when hovering on desktop */}
-      {showInfoBelow && (
-        <div className="card-info-below">
-          <h3>{anime.title}</h3>
-          <p>{metadata}</p>
-        </div>
-      )}
+      {/* Info Below Card - Hidden when hovering on desktop via CSS */}
+      <div className="card-info-below">
+        <h3>{anime.title}</h3>
+        <p>{metadata}</p>
+      </div>
     </div>
   );
 }

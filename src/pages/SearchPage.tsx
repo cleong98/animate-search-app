@@ -115,16 +115,23 @@ function SearchPage() {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-screen overflow-hidden">
+      {/* Fixed Header */}
       <AppBar title="Anime App" />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-7xl">
-        <div className="relative">
-          <SearchBar value={searchQuery} onChange={handleSearchChange} />
-          <FilterPanel onApplyFilters={handleApplyFilters} />
+      {/* Fixed Search and Filter Area */}
+      <div className="flex-shrink-0 border-b border-base-300 bg-base-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 max-w-7xl">
+          <div className="relative">
+            <SearchBar value={searchQuery} onChange={handleSearchChange} />
+            <FilterPanel onApplyFilters={handleApplyFilters} />
+          </div>
         </div>
+      </div>
 
-        <div className="min-h-[400px]">
+      {/* Scrollable Content Area */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-7xl">
           {error && (
             <ErrorAlert
               message={error.message || "An error occurred. Please try again."}
@@ -168,7 +175,7 @@ function SearchPage() {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

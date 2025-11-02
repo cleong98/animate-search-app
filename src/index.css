@@ -71,24 +71,54 @@
 /* Card wrapper for hover expansion */
 .card-wrapper {
   @apply relative;
+  /* Fixed height prevents layout shift - card info below takes ~3rem */
+  height: 27rem; /* h-96 (24rem) + card-info-below height (~3rem) */
+}
+
+/* Ensure hovered card wrapper is above others */
+.card-wrapper:not(.mobile):hover {
+  z-index: 50;
 }
 
 /* Normal card image container */
 .card-image-container {
   @apply relative h-96 rounded-lg overflow-hidden shadow-xl cursor-pointer;
-  transition: transform 300ms ease-out, opacity 300ms ease-out, box-shadow 300ms ease-out;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
 }
 
-/* Hover expanded state - desktop only */
-.card-hover-expanded {
-  position: absolute !important;
+/* Hover expanded state - desktop only, pure CSS */
+.card-wrapper:not(.mobile):hover .card-image-container {
+  position: absolute;
   top: 0;
   left: 0;
   transform: scale(1.15);
   transform-origin: center center;
-  z-index: 50;
   width: 100%;
+  height: 24rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Card overlay layer - visible by default, hidden on hover */
+.card-overlay-layer {
+  @apply absolute inset-0;
+  opacity: 1;
+  transition: opacity 150ms ease-out;
+}
+
+.card-wrapper:not(.mobile):hover .card-overlay-layer {
+  opacity: 0;
+}
+
+/* Card expanded content - hidden by default, visible on hover */
+.card-expanded-content {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease-out;
+}
+
+.card-wrapper:not(.mobile):hover .card-expanded-content {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Expanded content overlay */
@@ -105,6 +135,12 @@
 /* Card info below image */
 .card-info-below {
   @apply mt-3;
+  opacity: 1;
+  transition: opacity 150ms ease-out;
+}
+
+.card-wrapper:not(.mobile):hover .card-info-below {
+  opacity: 0;
 }
 
 .card-info-below h3 {
@@ -175,4 +211,13 @@
 
 .animate-dropdown {
   animation: dropdown 0.25s ease-out;
+}
+
+/* ============================================
+   PAGINATION SPACING
+   ============================================ */
+
+/* Add vertical padding to pagination to prevent it from being too cramped */
+.pagination-wrapper {
+  padding: 1rem 0;
 }

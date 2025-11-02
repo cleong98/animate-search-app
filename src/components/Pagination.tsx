@@ -78,7 +78,7 @@ function Pagination({
 
   if (isMobile) {
     return (
-      <div className="flex flex-col items-center gap-3 mt-8">
+      <div className="flex flex-col items-center gap-3 pagination-wrapper">
         <div className="flex items-center gap-2">
           <button
             className="btn btn-sm"
@@ -122,7 +122,7 @@ function Pagination({
   }
 
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-8">
+    <div className="flex flex-col md:flex-row justify-center items-center gap-4 pagination-wrapper">
       <div className="flex items-center gap-1">
         <button
           className="btn btn-sm"
